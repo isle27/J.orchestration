@@ -64,11 +64,15 @@ def get_incidents(token):
         print(f"Fetched {len(incidents['data'])} incidents")
         
         filtered = []
+        filtered2 = []
         for backlog in incident_list:
             if backlog.get("ticket_status") == "Backlog":
                 filtered.append(backlog)
+        for InProgress in incident_list:
+            if InProgress.get("ticket_status") == "InProgress":
+                filtered2.append(InProgress)
 
-        return random.choice(filtered) if filtered else None
+        return random.choice(filtered) if filtered else None,random.choice(filtered2) if filtered2 else None
 
     except requests.exceptions.HTTPError as e:
         print("HTTP error:", e.response.status_code, e.response.text)
@@ -104,3 +108,30 @@ def assign_incident(token, incident_id, engineer_id, remark="Assigned via script
     except requests.exceptions.RequestException as e:
         print("Request failed:", e)
         return None
+
+
+def reassign_incident(token, incident_id, engineer_id, remark="Reassigned via script", deadline_ms=None):
+    if deadline_ms is None:
+        deadline_ms = int((time.time() + 24*60*60) * 1000)
+
+    url = f"{BASE_URL}/reAssign/{incident_id}"
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "engineerId": engineer_id,
+        "deadline": deadline_ms,
+        "remark": remark
+    }
+    try:
+
+        response = requests.put(url, headers=headers, json=payload)
+        response.raise_for_status()
+        print(f"Incident {incident_id} reassigned successfully!")
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print("Request failed:", e)
+        return None
+
