@@ -3,7 +3,7 @@ name = "j-orchestration"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "isle27",email = "betelhemwubie28@gmail.com"}
+    {name = "daniel wubie",email = "155792225+danielwubie@users.noreply.github.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.13"
