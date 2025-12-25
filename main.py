@@ -6,7 +6,8 @@ from globals import globals
 from module.dataPrep import prepare_body, prepare_params, prepare_route_extension
 
 with open("./resource/apiDef.json", "r") as f:
-    data=json.load(f.read())
+    print(type(f))
+    data=json.loads(f.read())
 
 login_body={
     "email": "orcm@jegna.edr",
@@ -14,12 +15,18 @@ login_body={
 }
 globals.header={
     "content-type":"json",
-    "Authprization":f"bearer {call_api(route="/update-user/login",met="POST",body=login_body).json()["accessToken"]}"
+    "Authorization":f"Bearer {call_api(route='/update-user/login',met='POST',body=login_body).get('accessToken')}"
 }
-globals.incidents=call_api(route="/update-user/login",met="GET",params={})["data"]
-globals.assignable_users=call_api()
+globals.incidents=call_api(route="/incidents",met="GET",params={
+        "page": 1,
+        "limit": 20
+    }).get("data")
+globals.assignable_users=call_api(route="/update-user",met="GET",params={
+    "page": 1,
+    "limit": 20
+}).get("response")
 
-print(globals.incidents)
+print(globals.assignable_users)
 
 quit()
 
