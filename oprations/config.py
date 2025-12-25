@@ -6,3 +6,4 @@ import os
 load_dotenv()
 
 BASE_URL = os.getenv("BASE_URL")
+ROLE_PLAYS = os.getenv("ROLE_PLAYS")

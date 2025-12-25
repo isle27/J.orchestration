@@ -1,0 +1,37 @@
+{
+    "manager": {
+        "assign": [
+            {
+                "type": "incode",
+                "action": "filter",
+                "data": "incidents",
+                "operation": "status==backlog"
+            },
+            {
+                "type": "incode",
+                "action": "selectOne",
+                "data": "local_selection",
+                "operation": null
+            },
+            {
+                "type": "incode",
+                "action": "selectOne",
+                "data": "users",
+                "operation": null
+            },
+            {
+                "type": "api",
+                "method": "POST",
+                "route":"/assign",
+                "params": {},
+                "route_extension":"local_selection.CIID",
+                "body":{
+                    "engineerId":"collection.user.id",
+                    "deadline":"date+1",
+                    "remark":"random-sentence"
+                },
+                "operation": "status==backlog"
+            }
+        ]
+    }
+}

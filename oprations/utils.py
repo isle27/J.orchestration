@@ -1,6 +1,7 @@
 # Helper functions (random choice, delays, logging)
 import requests
-from config import BASE_URL
+import random
+from oprations.config import BASE_URL
 
 
 def login(email,password):
@@ -18,3 +19,25 @@ def login(email,password):
         return None
     
 
+def get_random_int(z,y):
+    pass
+
+def generate_random(x):
+    words = [
+        "apple",
+        "banana",
+        "cherry",
+        "date",
+        "elderberry",
+        "fig",
+        "grape",
+        "honeydew",
+        "kiwi",
+        "lemon"
+    ]
+    data=""
+    if x=="sentence":
+        for i in range(random.randint(5, 16)):
+            data= data+random.choice(words)+ " "
+    
+    return data
