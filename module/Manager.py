@@ -135,3 +135,21 @@ def reassign_incident(token, incident_id, engineer_id, remark="Reassigned via sc
         print("Request failed:", e)
         return None
 
+def  view_resolution_summary(token):
+    url = f"{BASE_URL}/resolution-summary"
+    params = {
+        "page": 1,
+        "limit": 20
+    }
+    headers = {
+        "Authorization": f"Bearer {token}"
+    }
+    try:
+        response = requests.get(url,headers=headers,params=params)
+        response.raise_for_status()
+        print("resolution summarys get successful")
+        return response
+    except requests.exceptions.RequestException as e:
+        print("Request failed:", e)
+        return None
+
