@@ -137,3 +137,28 @@ def reassign_incident(token, incident_id, engineer_id, remark="Reassigned via sc
         print("Request failed:", e)
         return None
 
+def comment_on_incident(token, incident_id, comment):
+
+    url = f"{BASE_URL}/comments/incidents/{incident_id}/comments"
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "comment": comment
+    }
+
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+        response.raise_for_status()
+        print(f"Comment added to incident {incident_id}")
+        return response.json()
+
+    except requests.exceptions.HTTPError:
+        print("HTTP error:", response.status_code, response.text)
+    except requests.exceptions.RequestException as e:
+        print("Request failed:", e)
+
+    return None
