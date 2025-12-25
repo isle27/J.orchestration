@@ -14,10 +14,14 @@ login_body={
 }
 globals.header={
     "content-type":"json",
-    "Authprization":f"bearer {call_api(route="/update-user/login",met="POST",body=login_body).json()["accessToken"]}"
+    "Authprization":f"Bearer {call_api(route="/update-user/login",met="POST",body=login_body).json()["accessToken"]}"
 }
-globals.incidents=call_api(route="/update-user/login",met="GET",params={})["data"]
-globals.assignable_users=call_api()
+globals.incidents=call_api(route="/incidents",met="GET",params={
+    "page": 1,
+    "limit": 20})["data"]
+globals.assignable_users=call_api(route="/update-user",met="GET",params={
+    "page": 1,
+    "limit": 20})["data"]
 
 print(globals.incidents)
 
