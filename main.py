@@ -21,47 +21,54 @@ globals.incidents=call_api(route="/incidents",met="GET",params={
         "page": 1,
         "limit": 20
     }).get("data")
-globals.assignable_users=call_api(route="/update-user",met="GET",params={
+globals.assignable_users=call_api(route="/update-user/assignable-users",met="GET",params={
     "page": 1,
     "limit": 20
-}).get("response")
+})
 
-print(globals.assignable_users)
+# print(globals.assignable_users)
 
-quit()
+
 
 
 
 
 for role in ROLE_PLAYS:
-    goals= data[role]
-    for k, v in goals:
+    goals= data.get(role)
+    print("❤❤❤",ROLE_PLAYS,role)
+    print("💨💨💨",goals)
+    for k, v in goals.items():
         if type(v)==list:
             local_grouped=[]
             collection={}
             for item in v:
-                if v.type=="api":
-                    body=prepare_body(v.body, collection)
-                    params=prepare_params(v.params, collection)
-                    route_extension=prepare_route_extension(v.route_extension,collection)
-                    res=call_api(v.get("route")+route_extension, v.get("method"), body, params)
+                if item.get("type")=="api":
+                    body=prepare_body(item.get("body"), collection)
+                    params=prepare_params(item.get("params"), collection)
+                    route_extension=prepare_route_extension(item.get("route_extension"),collection)
+                    res=call_api(item.get("route")+route_extension, item.get("method"), body, params)
                 else:
-                    if v.action == "filter":
-                        if v.data == "incidents":
+                    if item.get("action") == "filter":
+                        print(item.get("action"))
+                        if item.get("data") == "incidents":
                             for incident in globals.incidents:
-                                ops=v.operations.split("==") # [status, backlog]
+                                print(item.get("operation"))
+                                ops=item.get("operation").split("==") # [status, backlog]
                                 if incident[ops[0]]==ops[1]:
                                     local_grouped.append(incident)
-                        elif v.data=="users":
+                        elif item.get("data")=="users":
                             for incident in globals.assignable_users:
-                                ops=v.operations.split("==") # [status, backlog]
+                                ops=item.get("operation").split("==") # [status, backlog]
                                 if incident[ops[0]]==ops[1]:
                                     local_grouped.append(incident)
-                    elif v.action == "selectOne":
-                        if v.data=="local_selection":
-                            collection[v.data]=random.choice(local_grouped) #{incidents: {}, users: {}}
-                        if v.data=="users":
-                            collection[v.data]=random.choice(globals.assignable_users) #{incidents: {}}
+                    elif item.get("action") == "selectOne":
+                        if item.get("data")=="local_selection":
+                            collection[item.get("data")]=random.choice(local_grouped) #{incidents: {}, users: {}}
+                        if item.get("data")=="users":
+                            collection[item.get("data")]=random.choice(globals.assignable_users) #{incidents: {}}
+                            
+                        print("❤❤❤", collection)
+                        input()
                             
 
 

@@ -5,7 +5,7 @@
                 "type": "incode",
                 "action": "filter",
                 "data": "incidents",
-                "operation": "status==backlog"
+                "operation": "ticket_status==Backlog"
             },
             {
                 "type": "incode",
@@ -22,11 +22,15 @@
             {
                 "type": "api",
                 "method": "POST",
-                "route":"/assign",
-                "params": {},
-                "route_extension":"local_selection.CIID",
+                "route":"/incidents",
+                "params": {
+                    "page":1,
+                    "limit":20,
+                    "data":"simple.user.id"
+                },
+                "route_extension":"local_selection.incident_id",
                 "body":{
-                    "engineerId":"collection.user.id",
+                    "engineerId":"collection.users.id",
                     "deadline":"date+1",
                     "remark":"random-sentence"
                 },
