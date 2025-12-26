@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 from oprations.utils import generate_random
 def prepare_body(bodydef, collection):
     body={}
+    if not bodydef:
+        return None
     for k,v in bodydef.items():
         steps=v.split(".")  # ["collection", "user", "id"]
         if steps[0]=="collection":
@@ -11,7 +13,9 @@ def prepare_body(bodydef, collection):
             now = datetime.now()
             steps=v.split("+")
             actualDate= now + timedelta(days=int(steps[1]))
-            body[k]=int(actualDate.timestamp() * 1000)
+            print(k,int(actualDate.timestamp() * 1000))
+           
+            body[k]=str(1766921924369)
         elif v.startswith("random"):
             steps=v.split("-")
             data=generate_random(steps[1])
@@ -20,13 +24,14 @@ def prepare_body(bodydef, collection):
 
 def prepare_params(paramdef,collection):
     param={}
+    if not paramdef:
+        return None
     for k,v in paramdef.items():
         if type(v)==str and v.startswith("simple") :
             steps=v.split(".")  # ["collection", "user", "id"]
             print(steps,"💛💚🧡")
             if steps[1]=="collection":
                 param[k]=collection.get(steps[2]).get(steps[3]) # engineerId: collection.user.id
-            
         else:
             param[k]=v
             

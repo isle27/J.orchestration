@@ -21,13 +21,9 @@
             },
             {
                 "type": "api",
-                "method": "POST",
+                "method": "PUT",
                 "route":"/incidents",
-                "params": {
-                    "page":1,
-                    "limit":20,
-                    "data":"simple.user.id"
-                },
+               
                 "route_extension":"local_selection.incident_id",
                 "body":{
                     "engineerId":"collection.users.id",
@@ -36,6 +32,41 @@
                 },
                 "operation": "status==backlog"
             }
+        ],
+        "reassign":[
+            {
+                "type": "incode",
+                "action": "filter",
+                "data": "incidents",
+                "operation": "ticket_status==InProgress"
+            },
+             {
+                "type": "incode",
+                "action": "selectOne",
+                "data": "local_selection",
+                "operation": null
+            },
+             {
+                "type": "incode",
+                "action": "selectOne",
+                "data": "users",
+                "operation": null
+            },
+            {
+                "type": "api",
+                "method": "PUT",
+                "route":"/reAssign",
+               
+                "route_extension":"local_selection.incident_id",
+                "body":{
+                    "engineerId":"collection.users.id",
+                    "deadline":"date+1",
+                    "remark":"random-sentence"
+                },
+                "operation": "status==backlog"
+            }
+
         ]
+        
     }
 }
